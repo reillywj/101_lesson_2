@@ -14,7 +14,6 @@ def valid_number?(number)
   number.to_f != 0 || number == '0'
 end
 
-
 prompt "Welcome to Calculator!"
 
 name = ''
@@ -34,7 +33,7 @@ loop do
   number1 = ''
   loop do
     prompt "What's the first number?"
-    number1 = Kernel.gets().chomp()
+    number1 = Kernel.gets.chomp
     if valid_number?(number1)
       break
     else
@@ -45,7 +44,7 @@ loop do
   number2 = ''
   loop do
     prompt "What's the second number?"
-    number2 = Kernel.gets().chomp()
+    number2 = Kernel.gets.chomp
     if valid_number?(number2)
       break
     else
@@ -64,7 +63,7 @@ What operation would you like to perform?
 4: divide
     MSG
     prompt operator_prompt
-    operator_number = Kernel.gets().chomp()
+    operator_number = Kernel.gets.chomp
     if %w(1 2 3 4).include?(operator_number)
       break
     else
@@ -72,21 +71,21 @@ What operation would you like to perform?
     end
   end
   result = case operator_number
-          when '1'
-            operator = "+"
-            number1 + number2
-          when '2'
-            operator = "-"
-            number1 - number2
-          when '3'
-            operator = "*"
-            number1 * number2
-          when '4'
-            operator = "/"
-            number1 / number2
-          else
-            "Invalid input"
-          end
+           when '1'
+             operator = "+"
+             number1 + number2
+           when '2'
+             operator = "-"
+             number1 - number2
+           when '3'
+             operator = "*"
+             number1 * number2
+           when '4'
+             operator = "/"
+             number1 / number2
+           else
+             "Invalid input"
+           end
 
   prompt "#{number1}#{operator}#{number2} = #{result}"
 
