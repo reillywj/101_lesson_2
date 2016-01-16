@@ -42,6 +42,11 @@ def display_winner(score)
   end
 end
 
+def display_choices(player, computer)
+  prompt "Player: #{NICKNAMES[player]}"
+  prompt "Computer: #{NICKNAMES[computer]}"
+end
+
 def page_break
   puts '-' * 40
 end
@@ -79,8 +84,7 @@ until end_of_game? score
     score[1] += 1
   end
 
-  Kernel.puts("You chose: #{NICKNAMES[choice]};
-    Computer chose: #{NICKNAMES[computer_choice]}")
+  display_choices choice, computer_choice
 
   display_results choice, computer_choice
 
