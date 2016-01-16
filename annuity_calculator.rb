@@ -22,17 +22,17 @@ def prompt(message)
   print "> "
 end
 
-def calculate_monthly_interest(apr)
+def monthly_interest(apr)
   apr / 12
 end
 
-def convert_years_to_months(years)
+def years_to_months(years)
   years * 12
 end
 
-def calculate_monthly_payment(loan, apr, duration_in_years)
-  mthly_int = calculate_monthly_interest apr / 100
-  months = convert_years_to_months duration_in_years
+def monthly_payment(loan, apr, years)
+  mthly_int = monthly_interest apr / 100
+  months = years_to_months years
   if mthly_int > 0
     loan * (mthly_int * (1 + mthly_int)**months) / ((1 + mthly_int)**months - 1)
   else
@@ -76,12 +76,12 @@ loop do
 
   prompt MESSAGES['prompt_apr']
   apr = floating_point_input.to_f
-  mthly_int = calculate_monthly_interest apr
+  mthly_int = monthly_interest apr
 
   prompt MESSAGES['prompt_loan_duration']
   loan_years = duration_input.to_i
-  number_of_payments = convert_years_to_months loan_years
-  monthly_payment = calculate_monthly_payment(loan_amount, apr, loan_years)
+  number_of_payments = years_to_months loan_years
+  payment = monthly_payment(loan_amount, apr, loan_years)
 
   title "Loan Summary"
   standard_line "Loan Amount: $#{loan_amount}"
@@ -98,7 +98,7 @@ loop do
 
   title "Loan Payment Information"
   standard_line "#{number_of_payments} payments"
-  standard_line "$#{monthly_payment.round 2} per month"
+  standard_line "$#{payment.round 2} per month"
   standard_line "#{(mthly_int).round(3)}% monthly interest (#{apr}% APR)"
   prompt MESSAGES['prompt_continue']
   break unless %w(y yes).include? gets.chomp.downcase
