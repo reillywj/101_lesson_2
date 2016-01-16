@@ -7,59 +7,60 @@ require 'yaml'
 require 'pry'
 MESSAGES = YAML.load_file('annuity_calculator.yml')
 
-def prompt(message)
-  puts message
-  print "=> "
+def title(message)
+  puts "#{'*' * 10} #{message} #{'*' * 10}"
 end
 
-def calculate_monthly_interest(apr) apr/12 end
+def standard_line(message = "")
+  puts "=>#{message}"
+end
 
-def convert_years_to_months(years) years*12 end
+def prompt(message)
+  standard_line message
+  print "> "
+end
+
+def calculate_monthly_interest(apr)
+  apr / 12
+end
+
+def convert_years_to_months(years)
+  years * 12
+end
 
 def calculate_monthly_payment(loan, apr, duration_in_years)
-  #presumes no negative inputs
-  monthly_interest = calculate_monthly_interest apr/100
+  mthly_int = calculate_monthly_interest apr / 100
   months = convert_years_to_months duration_in_years
-  if monthly_interest > 0
-    loan*(monthly_interest*(1+monthly_interest)**months)/((1+monthly_interest)**months - 1)
-  else monthly_interest == 0
-    loan/months
+  if monthly_int > 0
+    loan * (mthly_int * (1 + mthly_int)**months) / ((1 + mthly_int)**months - 1)
+  else
+    loan / months
   end
 end
 
-def get_valid_name_input
-  prompt MESSAGES['prompt_name']
-  answer = gets.chomp
-  if answer == ''
-    prompt MESSAGES['invalid_name']
-    get_valid_name_input
-  end
-  answer
-end
-
-def get_valid_integer_input
+def integer_input
   answer = gets.chomp
   unless valid_integer? answer
     prompt MESSAGES['invalid_integer']
-    get_valid_integer_input
+    integer_input
   end
   answer
 end
 
-def get_valid_floating_point_input
+def floating_point_input
   answer = gets.chomp
   unless valid_floating_point? answer
     prompt MESSAGES['invalid_floating_point']
-    get_valid_floating_point_input
+    floating_point_input
   end
   answer
 end
 
-def get_valid_duration_input
+def duration_input
   answer = gets.chomp
   unless valid_duration? answer
     prompt MESSAGES['invalid_duration']
-    get_valid_duration_input
+    duration_input
   end
   answer
 end
@@ -76,35 +77,42 @@ def valid_duration?(string_input)
   Integer(string_input) > 0 rescue false
 end
 
-puts MESSAGES['welcome']
+title MESSAGES['welcome']
 
+loop do
+  title MESSAGES['get_started']
 
-user_name = get_valid_name_input
-puts "Hello #{user_name}, let's get started."
+  prompt MESSAGES['prompt_loan_amount']
+  loan_amount = integer_input.to_i
 
-prompt MESSAGES['prompt_loan_amount']
-loan_amount = get_valid_integer_input.to_i
+  prompt MESSAGES['prompt_apr']
+  apr = floating_point_input.to_f
+  mthly_int = calculate_monthly_interest apr_as_percentage
 
-prompt MESSAGES['prompt_apr']
-apr_as_percentage = gets.chomp.to_f
+  prompt MESSAGES['prompt_loan_duration']
+  loan_years = duration_input.to_i
+  number_of_payments = convert_years_to_months loan_years
+  monthly_payment = calculate_monthly_payment(loan_amount, apr, loan_years)
 
-prompt MESSAGES['prompt_loan_duration']
-loan_duration_years = get_valid_duration_input.to_i
+  title "Loan Summary"
+  standard_line "Loan Amount: $#{loan_amount}"
+  standard_line "Duration: #{loan_years} years"
+  standard_line "APR: #{apr}%"
 
-puts "#{user_name}'s Loan Information:"
-puts "Loan Amount: $#{loan_amount}"
-puts "Duration: #{loan_duration_years} years"
-puts "APR: #{apr_as_percentage}%"
+  print ">Calculating monthly payment..."
+  10.times do
+    sleep 0.1
+    print "."
+  end
 
-print "Calculating monthly payment..."
-10.times do
-  sleep 0.2
-  print "."
+  puts ''
+
+  title "Loan Payment Information"
+  standard_line "#{number_of_payments} payments."
+  standard_line "$#{monthly_payment.round 2} per month"
+  standard_line "#{(mthly_int).round(3)}% monthly interest (#{apr}% APR)"
+  prompt MESSAGES['prompt_continue']
+  break unless %w(y yes).include? gets.chomp.downcase
 end
 
-monthly_payment = calculate_monthly_payment(loan_amount, apr_as_percentage, loan_duration_years)
-
-puts "Loan Payment Information"
-puts "#{user_name}, you will have #{convert_years_to_months loan_duration_years} payments of $#{monthly_payment.round 2} per month, with monthly interest of #{(calculate_monthly_interest apr_as_percentage).round(3)}% (#{apr_as_percentage}% APR)."
-
-
+standard_line MESSAGES['goodbye']
