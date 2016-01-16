@@ -30,7 +30,7 @@ def years_to_months(years)
   years * 12
 end
 
-def monthly_payment(loan, apr, years)
+def calculate_monthly_payment(loan, apr, years)
   mthly_int = monthly_interest apr / 100
   months = years_to_months years
   if mthly_int > 0
@@ -81,7 +81,7 @@ loop do
   prompt MESSAGES['prompt_loan_duration']
   loan_years = duration_input.to_i
   number_of_payments = years_to_months loan_years
-  payment = monthly_payment(loan_amount, apr, loan_years)
+  payment = calculate_monthly_payment(loan_amount, apr, loan_years)
 
   title "Loan Summary"
   standard_line "Loan Amount: $#{loan_amount}"
