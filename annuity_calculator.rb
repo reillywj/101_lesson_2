@@ -2,6 +2,8 @@
 # 2. Ask user for name
 # 3. Ask user for financial information
 # 4. Provide monthly interest and monthly payments
+# 5. Ask if want to calculate more. If yes, loop through 2-5.
+# 6. Say good bye.
 
 require 'yaml'
 require 'pry'
@@ -38,15 +40,6 @@ def calculate_monthly_payment(loan, apr, duration_in_years)
   end
 end
 
-def integer_input
-  answer = gets.chomp
-  unless valid_integer? answer
-    prompt MESSAGES['invalid_integer']
-    answer = integer_input
-  end
-  answer
-end
-
 def floating_point_input
   answer = gets.chomp
   unless valid_floating_point? answer
@@ -67,10 +60,6 @@ end
 
 def valid_floating_point?(string_input)
   Float(string_input) >= 0 rescue false
-end
-
-def valid_integer?(string_input)
-  Integer(string_input) >= 0 rescue false
 end
 
 def valid_duration?(string_input)

@@ -8,4 +8,4 @@ invalid_floating_point: "Invalid input. Your input must be a non-negative number
 invalid_duration: "Invalid input. Your duration must be an integer greater than 0 years."
 invalid_name: "Blank. Please provide a name."
 prompt_continue: "Would you like to calculate another loan payment? Enter 'y' or 'yes'."
-goodbye: "Thank you for using this Annuity Caclulator. Have a nice day."
+goodbye: "Thank you for using this Annuity Calculator. Have a nice day."
