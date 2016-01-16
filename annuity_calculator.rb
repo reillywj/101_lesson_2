@@ -31,7 +31,7 @@ end
 def calculate_monthly_payment(loan, apr, duration_in_years)
   mthly_int = calculate_monthly_interest apr / 100
   months = convert_years_to_months duration_in_years
-  if monthly_int > 0
+  if mthly_int > 0
     loan * (mthly_int * (1 + mthly_int)**months) / ((1 + mthly_int)**months - 1)
   else
     loan / months
@@ -42,7 +42,7 @@ def integer_input
   answer = gets.chomp
   unless valid_integer? answer
     prompt MESSAGES['invalid_integer']
-    integer_input
+    answer = integer_input
   end
   answer
 end
@@ -51,7 +51,7 @@ def floating_point_input
   answer = gets.chomp
   unless valid_floating_point? answer
     prompt MESSAGES['invalid_floating_point']
-    floating_point_input
+    answer = floating_point_input
   end
   answer
 end
@@ -60,7 +60,7 @@ def duration_input
   answer = gets.chomp
   unless valid_duration? answer
     prompt MESSAGES['invalid_duration']
-    duration_input
+    answer = duration_input
   end
   answer
 end
@@ -83,11 +83,11 @@ loop do
   title MESSAGES['get_started']
 
   prompt MESSAGES['prompt_loan_amount']
-  loan_amount = integer_input.to_i
+  loan_amount = floating_point_input.to_f
 
   prompt MESSAGES['prompt_apr']
   apr = floating_point_input.to_f
-  mthly_int = calculate_monthly_interest apr_as_percentage
+  mthly_int = calculate_monthly_interest apr
 
   prompt MESSAGES['prompt_loan_duration']
   loan_years = duration_input.to_i
@@ -108,7 +108,7 @@ loop do
   puts ''
 
   title "Loan Payment Information"
-  standard_line "#{number_of_payments} payments."
+  standard_line "#{number_of_payments} payments"
   standard_line "$#{monthly_payment.round 2} per month"
   standard_line "#{(mthly_int).round(3)}% monthly interest (#{apr}% APR)"
   prompt MESSAGES['prompt_continue']
