@@ -47,6 +47,7 @@ def page_break
 end
 
 prompt "Welcome to #{GAME_NAME}!"
+prompt "This is a duel to 5!"
 score = [0, 0]
 until end_of_game? score
   choice = ''
